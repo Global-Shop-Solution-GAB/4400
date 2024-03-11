@@ -1,0 +1,1634 @@
+Program.Sub.Preflight.Start
+Variable.Global.sFile.Declare(String)
+Variable.Global.sExt.Declare(String)
+Variable.Global.sSource.Declare(String)
+Variable.Global.sDest.Declare(String)
+Variable.Global.sLogFile.Declare(String)
+Variable.Global.iType.Declare(Long,0)
+Variable.Global.iGroup.Declare(Long,0)
+Variable.Global.sLog.Declare(String)
+Variable.Global.sFileList.Declare(String)
+Variable.Global.sPart.Declare(String)
+Variable.Global.sSFile.Declare(String)
+Variable.Global.sDFile.Declare(String)
+Variable.Global.sPref.Declare(String)
+Variable.Global.sFileName.Declare(String)
+Variable.Global.sLogText.Declare(String)
+Variable.Global.sFailed.Declare(String)
+Variable.Global.sFailFile.Declare(String)
+Variable.Global.sFolder.Declare(String)
+Variable.Global.sDuplicate.Declare(String)
+
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+F.Intrinsic.Control.SetErrorHandler("Main_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+'\\BFC-SCAN\
+
+
+
+'open the connection first
+F.ODBC.Connection!conx.openconnection(v.Ambient.PDSN,v.Ambient.PUser,v.Ambient.PPass)
+v.Global.sFailed.Set("\\BFC-SCAN\DROP\FAILED\")
+v.Global.sDuplicate.Set("\\BFC-SCAN\DROP\DUPLICATE\")
+
+F.Intrinsic.Control.CallSub(Log,"sText","Starting the Process to create links and move to storage","bFirst",True)
+F.Intrinsic.Control.CallSub(Failed,"sText","Starting the Process to create links and move to storage","bFirst",True)
+
+'setting locations and global variables for AP
+V.Global.sSource.Set("\\BFC-SCAN\DROP\AP\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\AP\")
+v.Global.sFolder.Set("AP")
+v.Global.iGroup.Set(19)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START -----------AP","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for AP files","bFirst",False)
+F.Intrinsic.Control.CallSub(ap)
+
+
+'setting locations and global variables for AR
+V.Global.sSource.Set("\\BFC-SCAN\DROP\AR\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\AR\")
+v.Global.sFolder.Set("AR")
+v.Global.iGroup.Set(18)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------AR","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for AR files","bFirst",False)
+F.Intrinsic.Control.CallSub(ar)
+
+
+'setting locations and global variables for CT
+V.Global.sSource.Set("\\BFC-SCAN\DROP\CT\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\CT\")
+v.Global.sFolder.Set("CT")
+v.Global.iGroup.Set(5)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------MATERIAL CERTS","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for MATERIAL CERTS","bFirst",False)
+F.Intrinsic.Control.CallSub(ct)
+
+
+
+'setting locations and global variables for HR
+V.Global.sSource.Set("\\BFC-SCAN\DROP\HR\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\HR\")
+v.Global.sFolder.Set("HR")
+v.Global.iGroup.Set(10)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------HR","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for HR","bFirst",False)
+F.Intrinsic.Control.CallSub(hr)
+
+
+
+'setting locations and global variables for PH
+V.Global.sSource.Set("\\BFC-SCAN\DROP\PH\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\PH\")
+v.Global.sFolder.Set("PH")
+v.Global.iGroup.Set(31)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------PROJECT PHASE","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for PROJECT PHASE","bFirst",False)
+F.Intrinsic.Control.CallSub(ph)
+
+
+
+'setting locations and global variables for PR
+V.Global.sSource.Set("\\BFC-SCAN\DROP\PR\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\PR\")
+v.Global.sFolder.Set("PR")
+v.Global.iGroup.Set(31)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------PROJECT HEADER","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for PROJECT HEADER","bFirst",False)
+F.Intrinsic.Control.CallSub(pr)
+
+
+
+'setting locations and global variables for PO
+V.Global.sSource.Set("\\BFC-SCAN\DROP\PO\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\PO\")
+v.Global.sFolder.Set("PO")
+v.Global.iGroup.Set(20)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------PURCHASE ORDER","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for PURCHASE ORDER","bFirst",False)
+F.Intrinsic.Control.CallSub(po)
+
+
+'setting locations and global variables for SO
+V.Global.sSource.Set("\\BFC-SCAN\DROP\SO\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\SO\")
+v.Global.sFolder.Set("SO")
+v.Global.iGroup.Set(6)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------SALES ORDER","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for SALES ORDER","bFirst",False)
+F.Intrinsic.Control.CallSub(so)
+
+
+'setting locations and global variables for WO
+V.Global.sSource.Set("\\BFC-SCAN\DROP\WO\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\WO\")
+v.Global.sFolder.Set("WO")
+v.Global.iGroup.Set(2)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------WORK ORDER","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for WORK ORDER","bFirst",False)
+F.Intrinsic.Control.CallSub(wo)
+
+
+'setting locations and global variables for VE
+V.Global.sSource.Set("\\BFC-SCAN\DROP\VE\")
+V.Global.sDest.Set("\\BFC-SCAN\SCAN\VE\")
+v.Global.sFolder.Set("VE")
+v.Global.iGroup.Set(20)
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION START ----------VENDOR MASTER","bFirst",False)
+F.Intrinsic.Control.CallSub(Log,"sText","Source and destination paths set for VENDOR MASTER","bFirst",False)
+F.Intrinsic.Control.CallSub(ve)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Main_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Main.End
+
+Program.Sub.Log.Start
+F.Intrinsic.Control.SetErrorHandler("Log_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+
+
+
+V.Local.iHdl.Declare(Long)
+V.Local.sFile.Declare(String)
+V.Local.sLine.Declare(String)
+
+
+F.Intrinsic.File.GetHandle(V.Local.iHdl)
+F.Intrinsic.String.Concat(V.Caller.FilesDir,"\Doc_Link.log",V.Local.sFile)
+'F.Intrinsic.UI.Msgbox(V.Local.sFile)
+F.Intrinsic.Control.If(V.Args.bFirst,=,"True")
+	F.Intrinsic.File.OpenForWrite(V.Local.sFile,V.Local.iHdl)
+F.Intrinsic.Control.Else
+	F.Intrinsic.File.OpenForAppend(V.Local.sFile,V.Local.iHdl)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.String.Concat(V.Global.sLog,V.Ambient.NewLine,V.Ambient.Now,V.Ambient.Tab,V.Args.sText,V.Global.sLog)
+F.Intrinsic.String.Concat(V.Ambient.NewLine,V.Ambient.Now,V.Ambient.Tab,V.Args.sText,V.local.sLine)
+
+F.Intrinsic.File.WriteLine(V.Local.iHdl,V.local.sLine)
+
+F.Intrinsic.File.CloseFile(V.Local.iHdl)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Log_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.Log.End
+
+Program.Sub.Failed.Start
+F.Intrinsic.Control.SetErrorHandler("Log_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+V.Local.iHdl.Declare(Long)
+V.Local.sFile.Declare(String)
+V.Local.sLine.Declare(String)
+
+
+F.Intrinsic.File.GetHandle(V.Local.iHdl)
+F.Intrinsic.String.Concat(V.Caller.FilesDir,"\Doc_Failed.log",V.Local.sFile)
+'F.Intrinsic.UI.Msgbox(V.Local.sFile)
+F.Intrinsic.Control.If(V.Args.bFirst,=,"True")
+	F.Intrinsic.File.OpenForWrite(V.Local.sFile,V.Local.iHdl)
+F.Intrinsic.Control.Else
+	F.Intrinsic.File.OpenForAppend(V.Local.sFile,V.Local.iHdl)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.String.Concat(V.Global.sLog,V.Ambient.NewLine,V.Ambient.Now,V.Ambient.Tab,V.Args.sText,V.Global.sLog)
+F.Intrinsic.String.Concat(V.Ambient.NewLine,V.Ambient.Now,V.Ambient.Tab,V.Args.sText,V.local.sLine)
+
+F.Intrinsic.File.WriteLine(V.Local.iHdl,V.local.sLine)
+
+F.Intrinsic.File.CloseFile(V.Local.iHdl)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Log_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+Program.Sub.Failed.End
+
+Program.Sub.AP.Start
+F.Intrinsic.Control.SetErrorHandler("AP_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the AP folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking VENDOR files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_ap)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No VENDOR files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ VENDORS ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("AP_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.AP.End
+
+Program.Sub.AR.Start
+F.Intrinsic.Control.SetErrorHandler("AR_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the AR folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking CUSTOMER files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_ar)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No CUSTOMER files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ CUSTOMER ------ END","bFirst",False)
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("AR_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.AR.End
+
+Program.Sub.CT.Start
+F.Intrinsic.Control.SetErrorHandler("CT_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the CT folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking MATERIAL CERTS files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_ct)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No CERT files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ MATERIAL CERTS ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("CT_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.CT.End
+
+Program.Sub.HR.Start
+F.Intrinsic.Control.SetErrorHandler("HR_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the HR folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking HR files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_hr)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No HR files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ HR ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("HR_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.HR.End
+
+Program.Sub.PH.Start
+F.Intrinsic.Control.SetErrorHandler("PH_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the PH folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking PROJECT PHASE files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_ph)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No PROJECT PHASE files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ PROJECT PHASE ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("PH_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.PH.End
+
+Program.Sub.PO.Start
+F.Intrinsic.Control.SetErrorHandler("PO_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the PO folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking PO files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_po)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No PO files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ PO ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("PO_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.PO.End
+
+Program.Sub.PR.Start
+F.Intrinsic.Control.SetErrorHandler("PR_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the PR folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking PROJECT files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_pr)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No PROJECT files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ PROJECT ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("PR_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.PR.End
+
+Program.Sub.SO.Start
+F.Intrinsic.Control.SetErrorHandler("SO_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the SO folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking SALES ORDER files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_so)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No SALES ORDER files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ SALES ORDER ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("SO_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.SO.End
+
+Program.Sub.VE.Start
+F.Intrinsic.Control.SetErrorHandler("VE_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the VE folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking VENDOR files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_ve)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No VENDOR files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ VENDOR ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("VE_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.VE.End
+
+Program.Sub.WO.Start
+F.Intrinsic.Control.SetErrorHandler("WO_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+'Get files in the source drawings folder
+F.Intrinsic.File.GetFileList(V.Global.sSource,V.Global.sFileList)
+
+'check if the folder was empty or not and write log.
+f.Intrinsic.Control.If(v.Global.sFileList,<>,"")
+	F.Intrinsic.Control.CallSub(Log,"sText","Parsing files found in the WO folder","bFirst",False)
+	f.Intrinsic.String.Split(v.Global.sFileList,":",v.Global.sFileList)
+	F.Intrinsic.Control.CallSub(Log,"sText","------------Start linking WORK ORDER files------------","bFirst",False)
+	Function.Intrinsic.Control.CallSub(link_wo)
+f.Intrinsic.Control.Else
+	F.Intrinsic.Control.CallSub(Log,"sText","No WORK ORDER files to link at this time","bFirst",False)
+f.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Log,"sText","SECTION ------ WORK ORDER ------ END","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("WO_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.WO.End
+
+Program.Sub.link_ap.Start
+F.Intrinsic.Control.SetErrorHandler("link_ap_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sVendor.Declare(String)
+v.Local.sInvoice.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure the file is in upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split off the prefix
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sVendor.Set(v.Global.sFile(0))
+		v.Local.sInvoice.Set(v.Global.sFile(1))
+		'addressing the possibility that the file might be a check instead of an invoice.  Check files will have a 3rd segment in the name.
+		f.Intrinsic.Control.If(v.Global.sFile.UBound,>,2)
+			v.Local.sCheck.Set(v.Global.sFile(2))
+		f.Intrinsic.Control.Else
+			v.Local.sCheck.Set("")
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("AP file {0} is not a valid naming convention.  It Requires VENDORID_INVOICE#.extension or VENDORID_INVOICE#_CHECK#.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.Control.If(v.Local.sCheck,>,"")
+		f.Intrinsic.String.Build("Select VENDOR, INVOICE, CHECK_NUM FROM V_AP_HIST WHERE VENDOR = '{0}' AND INVOICE = '{1}' AND CHECK_NUM = '{2}'",V.Local.sVendor,V.Local.sInvoice,V.Local.sCheck,V.Local.sSql)
+	f.Intrinsic.Control.Else
+		f.Intrinsic.String.Build("select VENDOR, INVOICE FROM V_AP_OPEN_ITEMS WHERE VENDOR = '{0}' AND INVOICE = '{1}'",V.Local.sVendor,V.Local.sInvoice,V.Local.sSql)
+	f.Intrinsic.Control.EndIf
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstAP",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstAP.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstAP.EOF,=,True)
+	
+
+			'the file names will link to multiple part numbers
+			f.Intrinsic.String.Concat(v.Local.sVendor,v.Local.sInvoice,v.Local.sLinkKey)
+				'create the reference
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,11,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstAP.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstAP.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_ap_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_ap.End
+
+Program.Sub.MoveToStorage.Start
+F.Intrinsic.Control.SetErrorHandler("MoveToStorage_Err")
+F.Intrinsic.Control.ClearErrors
+v.Local.bExists.Declare(Boolean)
+v.Local.iRet.Declare(Long)
+
+V.Local.sError.Declare(String)
+
+'the source and destination files are determined in "link" subroutines
+'here we are just moving the file to the FAILED folder destination. Something is wrong with the file name.
+f.Intrinsic.File.Exists(v.Global.sDFile,v.Local.bExists)
+Function.Intrinsic.Control.If(v.Local.bExists,=,False)
+	f.Intrinsic.File.MoveFile(v.Global.sSFile,v.Global.sDFile,v.Local.iRet)
+	f.Intrinsic.Control.If(v.Local.iRet,=,0)
+		f.Intrinsic.String.Build("Failed to move file '{0}', check the folder permissions and file properties for read only",v.Global.sSFile,v.Global.sLogText)
+		f.Intrinsic.Control.CallSub(failed,"sText",v.Global.sLogText,"bFirst",False)
+	f.Intrinsic.Control.Else
+		f.Intrinsic.String.Build("File {0} successfully moved",v.Global.sFileName,v.Global.sDest,v.Global.sLogText)
+		f.Intrinsic.Control.CallSub(log,"sText",v.Global.sLogText,"bFirst",False)
+	f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.Else
+	f.Intrinsic.String.Build("File {0} already exists, moving to duplicates",v.Global.sDFile,v.Global.sLogText)
+	f.Intrinsic.Control.CallSub(log,"sText",v.Global.sLogText,"bFirst",False)
+	f.Intrinsic.String.Replace(v.Global.sDFile,v.Global.sDest,v.Global.sDuplicate,v.Global.sDFile)
+	f.Intrinsic.File.MoveFile(v.Global.sSFile,v.Global.sDFile,v.Local.iRet)
+	f.Intrinsic.Control.If(v.Local.bExists,=,0)
+		f.Intrinsic.String.Build("Failed to move file {0}",v.Global.sSFile,v.Global.sLogText)
+		f.Intrinsic.Control.CallSub(failed,"sText",v.Global.sLogText,"bFirst",False)
+	f.Intrinsic.Control.Else
+		f.Intrinsic.String.Build("Successfully moved {0} to the duplicates folder",v.Global.sDFile,v.Global.sLogText)
+		f.Intrinsic.Control.CallSub(failed,"sText",v.Global.sLogText,"bFirst",False)
+	f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.EndIf
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("MoveToStorage_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.MoveToStorage.End
+
+Program.Sub.MoveToFailed.Start
+F.Intrinsic.Control.SetErrorHandler("MoveToFailed_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+v.Local.iRet.Declare(Long)
+v.Local.bExists.Declare(Boolean)
+
+	'manage the file here without creating links for it.
+f.Intrinsic.File.DirExists(V.Global.sFailed,V.Local.iRet)
+F.Intrinsic.Control.If(V.Local.iRet,=,0)
+	F.Intrinsic.File.CreateDir(V.Global.sFailed)
+F.Intrinsic.Control.EndIf
+f.Intrinsic.String.Concat(v.Global.sFailed,v.Global.sFileName,v.Global.sFailFile)
+F.Intrinsic.String.Build("Could not find a matching database records for file {0}",v.Global.sFileName,v.Global.sLogText)
+f.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+F.Intrinsic.File.Exists(V.Global.sFailFile,V.Local.bExists)
+F.Intrinsic.Control.If(V.Local.bExists,=,True)
+	f.Intrinsic.File.DeleteFile(v.Global.sFailFile)
+f.Intrinsic.Control.EndIf
+f.Intrinsic.File.MoveFile(v.Global.sSFile,v.Global.sFailFile,v.Local.iRet)
+f.Intrinsic.Control.If(v.Local.iRet,=,0)
+	f.Intrinsic.String.Build("Could not move file {0} to the failed folder {1}",v.Global.sFileName,v.Global.sFailed,v.Global.sLogText)
+f.Intrinsic.Control.Else
+	f.Intrinsic.String.Build("Moved file {0} to the failed folder {1}",v.Global.sFileName,v.Global.sFailed,v.Global.sLogText)
+f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+f.Intrinsic.Control.CallSub(Failed,"sText","---------------------------------------------","bFirst",False)
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("MoveToFailed_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.MoveToFailed.End
+
+Program.Sub.link_ar.Start
+F.Intrinsic.Control.SetErrorHandler("link_ar_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sCustomer.Declare(String)
+v.Local.sRandom.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure the file is in upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split on delimiter underscore
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sCustomer.Set(v.Global.sFile(0))
+		v.Local.sRandom.Set(v.Global.sFile(1))
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("AR file {0} is not a valid naming convention.  It Requires CUSTOMERID_RANDOMTEXT.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.String.Build("Select CUSTOMER FROM V_CUSTOMER_MASTER WHERE CUSTOMER = '{0}'",V.Local.sCustomer,V.Local.sSql)
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstCus",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstCus.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstCus.EOF,=,True)
+	
+
+			'the file names will link to multiple part numbers
+			v.Local.sLinkKey.Set(v.ODBC.conx!rstCus.FieldVal!CUSTOMER)
+				'create the reference
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,15,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstCus.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstCus.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_ar_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_ar.End
+
+Program.Sub.link_ct.Start
+F.Intrinsic.Control.SetErrorHandler("link_ct_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.bRet.Declare(Boolean)
+v.Local.sPart.Declare(String)
+v.Local.sPO.Declare(String)
+v.Local.sHeat.Declare(String)
+V.Local.sLot.Declare(String)
+v.Local.sBin.Declare(String)
+v.Local.sLoc.Declare(String)
+v.Local.sSerial.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure file is uppercase
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split the file name to segments
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sPart.Set(v.Global.sFile(0))
+		v.Local.sPO.Set(v.Global.sFile(1))
+		F.Intrinsic.String.LPad(V.Local.sPO,"0",7,V.Local.sPO)
+		v.Local.sHeat.Set(v.Global.sFile(2))
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("CERT file {0} is not a valid naming convention.  It Requires PART_PO#_HEAT#.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.String.Build("Select PART, LOCATION, LOT, BIN, HEAT, SERIAL_NUMBER FROM V_ITEM_MASTER WHERE PART = '{0}' AND PO_NUMBER = '{1}' AND HEAT = '{2}'",V.Local.sPart,V.Local.sPO,V.Local.sHeat,V.Local.sSql)
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstInv",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstInv.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstInv.EOF,=,True)
+	
+			v.Local.sPart.Set(v.ODBC.conx!rstInv.FieldValTrim!PART)
+			V.Local.sLoc.Set(V.ODBC.conx!rstInv.FieldValTrim!LOCATION)
+			v.Local.sLot.Set(v.ODBC.conx!rstInv.FieldValTrim!LOT)
+			V.Local.sBin.Set(v.ODBC.conx!rstInv.FieldValTrim!BIN)
+			v.Local.sHeat.Set(v.ODBC.conx!rstInv.FieldValTrim!HEAT)
+			V.Local.sSerial.Set(V.ODBC.conx!rstInv.FieldValTrim!SERIAL_NUMBER)
+			
+			'pad each field to create the link key
+			f.Intrinsic.String.RPad(v.Local.sPart," ",22,v.Local.sPart)
+			f.Intrinsic.String.RPad(v.Local.sLot," ",15,v.Local.sHeat)
+			f.Intrinsic.String.RPad(v.Local.sBin," ",6,v.Local.sBin)
+			f.Intrinsic.String.RPad(v.Local.sHeat," ",15,v.Local.sHeat)
+			f.Intrinsic.String.RPad(v.Local.sSerial," ",30,v.Local.sSerial)
+			f.Intrinsic.String.Concat(v.Local.sPart,v.Local.sLot,v.Local.sBin,v.Local.sHeat,v.Local.sSerial,v.Local.sLinkKey)
+			f.Intrinsic.String.UCase(v.Local.sLinkKey,v.Local.sLinkKey)
+
+				'create the reference
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,31,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstInv.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstInv.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_ct_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_ct.End
+
+Program.Sub.link_hr.Start
+F.Intrinsic.Control.SetErrorHandler("link_hr_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sEmployee.Declare(String)
+v.Local.sRandom.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure the file name is upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split off the prefix
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sEmployee.Set(v.Global.sFile(0))
+		v.Local.sRandom.Set(v.Global.sFile(1))
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("HR file {0} is not a valid naming convention.  It Requires EMP#_RANDOMTXT.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.String.Build("Select EMPLOYEE FROM V_EMPLOYEE_MSTR WHERE EMPLOYEE = '{0}'",V.Local.sEmployee,V.Local.sSql)
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstEmp",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstEmp.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstEmp.EOF,=,True)
+	
+
+			'the file names will link to multiple part numbers
+			v.Local.sLinkKey.Set(v.ODBC.conx!rstEmp.FieldVal!EMPLOYEE)
+				'create the reference
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,55,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstEmp.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstEmp.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_hr_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_hr.End
+
+Program.Sub.link_ph.Start
+F.Intrinsic.Control.SetErrorHandler("link_ph_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sProject.Declare(String)
+v.Local.sPhase.Declare(String)
+v.Local.sRandom.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure file name is in upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split off the prefix
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sProject.Set(v.Global.sFile(0))
+		v.Local.sPhase.Set(v.Global.sFile(1))
+		v.Local.sRandom.Set(v.Global.sFile(2))
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("PH file {0} is not a valid naming convention.  It Requires PROJECT_PHASE_RANDOMTXT.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.String.Build("Select PROJECT, PHASE FROM V_PROJECT_PHASE WHERE PROJECT = '{0}' AND PHASE = '{1}'",V.Local.sProject,V.Local.sPhase,V.Local.sSql)
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstPph",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstPph.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstPph.EOF,=,True)
+	
+
+			'build the link key
+			v.Local.sProject.Set(v.ODBC.conx!rstPph.FieldValTrim!PROJECT)
+			v.Local.sPhase.Set(v.ODBC.conx!rstPph.FieldValTrim!PHASE)
+			f.Intrinsic.String.RPad(v.Local.sProject," ",7,v.Local.sProject)
+			f.Intrinsic.String.RPad(v.Local.sPhase," ",4,v.Local.sPhase)
+			f.Intrinsic.String.Concat(v.Local.sProject,v.Local.sPhase,v.Local.sLinkKey)
+			f.Intrinsic.String.UCase(v.Local.sLinkKey,v.Local.sLinkKey)
+				'create the reference
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,28,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstPph.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstPph.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_ph_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_ph.End
+
+Program.Sub.link_pr.Start
+F.Intrinsic.Control.SetErrorHandler("link_pr_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sProject.Declare(String)
+v.Local.sPhase.Declare(String)
+v.Local.sRandom.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure file name is in upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split off the prefix
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sProject.Set(v.Global.sFile(0))
+		v.Local.sRandom.Set(v.Global.sFile(1))
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("PR file {0} is not a valid naming convention.  It Requires PROJECT_RANDOMTXT.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.String.Build("Select PROJECT FROM V_PROJECT_MASTER WHERE PROJECT = '{0}'",V.Local.sProject,V.Local.sSql)
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstPph",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstPph.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstPph.EOF,=,True)
+	
+
+			'build the link key
+			v.Local.sProject.Set(v.ODBC.conx!rstPph.FieldValTrim!PROJECT)
+			f.Intrinsic.String.RPad(v.Local.sProject," ",7,v.Local.sProject)
+			V.Local.sLinkKey.Set(V.Local.sProject)
+			f.Intrinsic.String.UCase(v.Local.sLinkKey,v.Local.sLinkKey)
+				'create the reference
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,27,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstPph.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstPph.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_pr_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_pr.End
+
+Program.Sub.link_po.Start
+F.Intrinsic.Control.SetErrorHandler("link_po_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sPo.Declare(String)
+v.Local.sRandom.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure file name is in upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split off the prefix
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sPo.Set(v.Global.sFile(0))
+		f.Intrinsic.String.LPad(v.Local.sPo,"0",7,v.Local.sPo)
+		v.Local.sRandom.Set(v.Global.sFile(1))
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("PO file {0} is not a valid naming convention.  It Requires PO_RANDOMTXT.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.String.Build("Select PURCHASE_ORDER FROM V_PO_HEADER WHERE PURCHASE_ORDER = '{0}'",V.Local.sPo,V.Local.sSql)
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstPO",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstPO.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstPO.EOF,=,True)
+	
+
+			'build the link key
+			v.Local.sPo.Set(v.ODBC.conx!rstPO.FieldValTrim!PURCHASE_ORDER)
+			f.Intrinsic.String.LPad(v.Local.sPo,"0",7,v.Local.sPo)
+			V.Local.sLinkKey.Set(V.Local.sPo)
+			f.Intrinsic.String.UCase(v.Local.sLinkKey,v.Local.sLinkKey)
+				'create the reference
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,60,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstPO.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstPO.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_po_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_po.End
+
+Program.Sub.link_so.Start
+F.Intrinsic.Control.SetErrorHandler("link_so_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sSO.Declare(String)
+v.Local.sRandom.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure file name is in upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split off the prefix
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sSO.Set(v.Global.sFile(0))
+		f.Intrinsic.String.LPad(v.Local.sSO,"0",7,v.Local.sSO)
+		v.Local.sRandom.Set(v.Global.sFile(1))
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("SO file {0} is not a valid naming convention.  It Requires SO_RANDOMTXT.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.String.Build("Select ORDER_NO FROM V_ORDER_HEADER WHERE ORDER_NO = '{0}'",V.Local.sSO,V.Local.sSql)
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstSO",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstSO.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstSO.EOF,=,True)
+	
+
+			'build the link key
+			v.Local.sSO.Set(v.ODBC.conx!rstSO.FieldValTrim!ORDER_NO)
+			f.Intrinsic.String.LPad(v.Local.sSO,"0",7,v.Local.sSO)
+			V.Local.sLinkKey.Set(V.Local.sSO)
+			f.Intrinsic.String.UCase(v.Local.sLinkKey,v.Local.sLinkKey)
+				'see if the file has already been linked
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,45,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstSO.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstSO.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_so_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_so.End
+
+Program.Sub.link_wo.Start
+F.Intrinsic.Control.SetErrorHandler("link_wo_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sWO.Declare(String)
+v.Local.sSuf.Declare(String)
+v.Local.sRandom.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure file name is in upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split off the prefix
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		f.Intrinsic.Control.If(v.Global.sFile.UBound,>,1)
+			v.Local.sWO.Set(v.Global.sFile(0))
+			f.Intrinsic.String.LPad(v.Local.sWO,"0",6,v.Local.sWO)
+			v.Local.sSuf.Set(v.Global.sFile(1))
+			v.Local.sRandom.Set(v.Global.sFile(2))
+		f.Intrinsic.Control.Else
+			v.Local.sWO.Set(v.Global.sFile(0))
+			f.Intrinsic.String.LPad(v.Local.sWO,"0",6,v.Local.sWO)
+			v.Local.sRandom.Set(v.Global.sFile(2))		
+		f.Intrinsic.Control.endif
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("WO file {0} is not a valid naming convention.  It Requires WO_RANDOMTXT.extension or WO_SUFFIX_RANDOMTXT.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.Control.If(v.Global.sFile.UBound,>,2)
+		f.Intrinsic.String.Build("select JOB, SUFFIX from V_JOB_HEADER where JOB = '{0}' AND SUFFIX = '{1}'",v.Local.sWO,v.Local.sSuf,v.Local.sSql)
+	f.Intrinsic.Control.Else
+		f.Intrinsic.String.Build("Select JOB FROM V_JOB_HEADER WHERE JOB = '{0}'",V.Local.sWO,V.Local.sSql)
+	f.Intrinsic.Control.EndIf
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstWO",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstWO.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstWO.EOF,=,True)
+	
+
+			'build the link key
+			v.Local.sWO.Set(v.ODBC.conx!rstWO.FieldValTrim!JOB)
+			f.Intrinsic.String.LPad(v.Local.sWO,"0",6,v.Local.sWO)
+			f.Intrinsic.Control.If(v.Local.sSuf,>,"")
+				f.Intrinsic.String.LPad(v.Local.sSuf," ",3,v.Local.sSuf)
+				f.Intrinsic.String.Concat(v.Local.sWO,v.Local.sSuf,v.Local.sLinkKey)
+			f.Intrinsic.Control.Else
+				v.Local.sLinkKey.Set(v.Local.sWO)
+			f.Intrinsic.Control.EndIf
+			f.Intrinsic.String.UCase(v.Local.sLinkKey,v.Local.sLinkKey)
+				'create the reference
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,20,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstWO.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstWO.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_wo_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_wo.End
+
+Program.Sub.link_ve.Start
+F.Intrinsic.Control.SetErrorHandler("link_ve_Err")
+F.Intrinsic.Control.ClearErrors
+
+V.Local.sError.Declare(String)
+
+v.Local.iCount.Declare(Long)
+v.Local.iRet.Declare(Long)
+v.Local.sSql.Declare(String)
+v.Local.sLinkKey.Declare(String)
+V.Local.iLinkID.Declare(Long,0)
+v.Local.bExists.Declare(Boolean)
+v.Local.iInv.Declare(Long)
+v.Local.iRtr.Declare(Long)
+v.Local.bRet.Declare(Boolean)
+v.Local.sVendor.Declare(String)
+v.Local.sRandom.Declare(String)
+v.Local.sCheck.Declare(String)
+
+
+
+'begin looping through the files
+f.Intrinsic.Control.For(v.Local.iCount,0,v.Global.sFileList.UBound,1)
+	'FQDN for both source and destination files
+	f.Intrinsic.String.Concat(v.Global.sSource,v.Global.sFileList(v.Local.iCount),v.Global.sSFile)
+	f.Intrinsic.String.Concat(v.Global.sDest,v.Global.sFileList(v.Local.iCount),v.Global.sDFile)
+	'need to keep the name of the file intact in a global variable for later use
+	v.Global.sFileName.Set(v.Global.sFileList(v.Local.iCount))
+	'make sure file name is in upper case
+	f.Intrinsic.String.UCase(v.Global.sFileName,v.Global.sFileName)
+	f.Intrinsic.String.Build("file {0} found in folder",v.Global.sFileName,v.Global.sLogText)
+	F.Intrinsic.Control.CallSub(Log,"sText",v.Global.sLogText,"bFirst",False)
+	'split off the extension
+	f.Intrinsic.String.Split(v.Global.sFileName,".",v.Global.sFile)
+	v.Global.sExt.Set(v.Global.sFile(1))
+	'split off the prefix
+	f.Intrinsic.String.IsInString(v.Global.sFile(0),"_",True,v.Local.bRet)
+	f.Intrinsic.Control.If(v.Local.bRet,=,True)
+		f.Intrinsic.String.Split(v.Global.sFile(0),"_",v.Global.sFile)
+		v.Local.sVendor.Set(v.Global.sFile(0))
+		f.Intrinsic.String.LPad(v.Local.sVendor,"0",6,v.Local.sVendor)
+		v.Local.sRandom.Set(v.Global.sFile(1))
+	f.Intrinsic.Control.Else
+		'the file name is not correct.  This link requires 2 segments, vendor and invoice. Failed log and move to the failed folder.
+		f.Intrinsic.String.Build("VE file {0} is not a valid naming convention.  It Requires VENDORID_RANDOMTXT.extension",v.Global.sFileName,v.Global.sLogText)
+		F.Intrinsic.Control.CallSub(Failed,"sText",v.Global.sLogText,"bFirst",False)
+		f.Intrinsic.Control.CallSub(movetofailed)
+		f.Intrinsic.Control.Next(v.Local.iCount)
+	f.Intrinsic.Control.endif
+
+	
+	'set query variable and open recordset
+	f.Intrinsic.String.Build("Select VENDOR FROM V_VENDOR_MASTER WHERE VENDOR = '{0}'",V.Local.sVendor,V.Local.sSql)
+
+	f.ODBC.Connection!conx.OpenRecordsetRO("rstVen",v.Local.sSql)
+	f.Intrinsic.Control.If(v.ODBC.conx!rstVen.EOF,=,False)
+		f.Intrinsic.Control.DoUntil(v.ODBC.conx!rstVen.EOF,=,True)
+	
+
+			'build the link key
+			v.Local.sVendor.Set(v.ODBC.conx!rstVen.FieldValTrim!VENDOR)
+			f.Intrinsic.String.LPad(v.Local.sVendor,"0",6,v.Local.sVendor)
+			V.Local.sLinkKey.Set(V.Local.sVendor)
+			f.Intrinsic.String.UCase(v.Local.sLinkKey,v.Local.sLinkKey)
+				'see if the file has already been linked
+				f.Global.DocumentControl.CreateReference(v.Local.sLinkKey,10,v.Local.iLinkID)
+				f.Global.DocumentControl.AddDocument(v.Local.iLinkID,v.Global.sDFile,"",v.Global.iGroup,"")
+				
+				'loop to the next record in the query
+				f.ODBC.conx!rstVen.MoveNext
+				f.Intrinsic.Control.Loop
+				
+				
+				'move file to storage (linked folder)
+				f.Intrinsic.Control.CallSub(movetostorage)		
+	f.Intrinsic.Control.Else
+		'move the file to the failed folder.  Update the name first.
+		f.Intrinsic.Control.CallSub(movetofailed)		
+	f.Intrinsic.Control.EndIf
+f.ODBC.conx!rstVen.Close
+f.Intrinsic.Control.Next(v.Local.iCount)
+
+
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("link_ve_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Project: GAB_DOCLINK_BFC.g2u",V.Ambient.Newline,V.Ambient.Newline,"Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+Program.Sub.link_ve.End
+
+Program.Sub.Comments.Start
+${$0$}$GAB_DOCLINK_BFC$}$DFINCH$}$12/29/2016 10:04:47 AM$}$False
+${$3$}$0$}$$}$0$}$-1$}$$}$12:00:00 AM$}$Auto document linking.  Docs and picked up and stored on a different server than the GSS Server.
+Program.Sub.Comments.End
